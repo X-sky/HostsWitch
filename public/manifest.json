@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "HostsWitch",
+  "description": "Enjoy the very fast and instant hosts-switching experience with ✨HostsWitch✨",
+  "minimum_chrome_version": "84",
+  "version": "0.0.1",
+  "icons": {
+    "16": "icons/logo-16.png",
+    "48": "icons/logo-16.png",
+    "128": "icons/logo-16.png"
+  },
+  "action": {
+    "default_icon": "icons/logo-16.png",
+    "default_title": "HostsWitch",
+    "default_popup": "popup/index.html"
+  },
+  "permissions": ["declarativeNetRequest", "proxy", "storage"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "optional_host_permissions": ["*://*/*"]
+}

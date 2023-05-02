@@ -6,6 +6,7 @@ import { teal } from '@mui/material/colors';
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import PanelList from './components/PanelList/PanelList';
 import EditArea from './components/EditArea/EditArea';
+import useAutoUpdateConfig from '../hooks/useUpdateConfig';
 
 const theme = createTheme({
   palette: {
@@ -16,6 +17,7 @@ const theme = createTheme({
 });
 
 function App() {
+  useAutoUpdateConfig();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseLine />

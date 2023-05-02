@@ -1,17 +1,34 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Input from '@mui/material/Input';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import SettingsIcon from '@mui/icons-material/Settings';
+// import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import { usePanelDrawerState } from '../../../store/panelDrawer';
+import { useHostStore } from '../../../store/host';
+import { useState } from 'react';
 
 export default function HeaderBar() {
   const { isDrawerOpen, toggleDrawerState } = usePanelDrawerState();
+  const {
+    currentHostInfo,
+    addHostPanel,
+    updatePanelItem,
+    extensionEnabled,
+    setExtensionEnabled
+  } = useHostStore();
+  const [editFlag, setEditFlag] = useState(false);
+
+  const dblNameClickHandler = () => {
+    if (!currentHostInfo.enabled) {
+      setEditFlag(true);
+    }
+  };
   return (
     <AppBar
       position="absolute"
@@ -38,13 +55,18 @@ export default function HeaderBar() {
           aria-label="toggle panel drawer"
           onClick={toggleDrawerState}
         >
-          {isDrawerOpen ? <ArrowBackIosNewOutlinedIcon /> : <TuneOutlinedIcon />}
+          {isDrawerOpen ? (
+            <ArrowBackIosNewOutlinedIcon />
+          ) : (
+            <TuneOutlinedIcon />
+          )}
         </IconButton>
         <IconButton
           size="small"
           edge="start"
           color="inherit"
           aria-label="add a panel"
+          onClick={addHostPanel}
         >
           <AddCircleOutlineIcon />
         </IconButton>
@@ -64,25 +86,50 @@ export default function HeaderBar() {
             textOverflow: 'ellipsis'
           }}
         >
-          <Chip
-            label="read only"
-            size="small"
-            sx={{
-              position: 'relative',
-              right: '10px',
-              fontSize: '10px'
-            }}
-          />
-          Panel Name
+          {currentHostInfo.enabled && (
+            <Chip
+              label="read only"
+              size="small"
+              sx={{
+                position: 'relative',
+                right: '10px',
+                fontSize: '10px'
+              }}
+            />
+          )}
+          {editFlag ? (
+            <Input
+              placeholder="Placeholder"
+              inputProps={{
+                'aria-label': 'edit panel name'
+              }}
+              value={currentHostInfo.name}
+              onChange={(e) => {
+                updatePanelItem({
+                  id: currentHostInfo.id,
+                  name: e.target.value
+                });
+              }}
+              onBlur={() => setEditFlag(false)}
+            />
+          ) : (
+            <span onDoubleClick={dblNameClickHandler}>
+              {currentHostInfo.name}
+            </span>
+          )}
         </Typography>
-        <IconButton size="small" edge="start" aria-label="system settings">
+
+        {/* <IconButton size="small" edge="start" aria-label="system settings">
           <SettingsIcon />
-        </IconButton>
+        </IconButton> */}
         <IconButton
           size="small"
           edge="start"
-          color="error"
-          aria-label="shut down extension"
+          color={extensionEnabled ? 'error' : 'default'}
+          aria-label={
+            extensionEnabled ? 'shut down extension' : 'turn on extension'
+          }
+          onClick={() => setExtensionEnabled((state) => !state)}
         >
           <PowerSettingsNew />
         </IconButton>

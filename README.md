@@ -19,7 +19,7 @@
 ## Install(not valid)
 
 - [~~Chrome Web Store~~]()（recommended）
-- [~~download the .crx file~~]() and refer to [this article](https://www.turnoffthelights.com/support/browser-extension/how-to-install-chrome-extensions-in-3-easy-steps/) to install the `.crx` file
+- [download the .crx file](https://github.com/X-sky/HostsWitch/blob/main/HostsWitch_0.0.1.crx) and refer to [this article](https://www.turnoffthelights.com/support/browser-extension/how-to-install-chrome-extensions-in-3-easy-steps/) to install the `.crx` file
 
 ## Rules
 
