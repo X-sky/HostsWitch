@@ -1,6 +1,6 @@
 # HostsWitch
 
-> Enjoy the very fast and instant hosts-switching experience with ✨HostsWitch✨ !
+> Enjoy the very fast and instant host-switching experience with ✨HostsWitch✨ !
 
 ## Features
 
@@ -16,9 +16,9 @@
 - custom direct proxy
 - syntax highlight
 
-## Install(not valid)
+## Install
 
-- [~~Chrome Web Store~~]()（recommended）
+- ~~[Chrome Web Store(not valid)]()~~
 - [download the .crx file](https://github.com/X-sky/HostsWitch/blob/main/HostsWitch_0.0.1.crx) and refer to [this article](https://www.turnoffthelights.com/support/browser-extension/how-to-install-chrome-extensions-in-3-easy-steps/) to install the `.crx` file
 
 ## Rules
@@ -29,8 +29,9 @@
 
 # hosts
 192.168.100.1 domain.com domain.com.cn domain2.com
+192.168.100.2 test.com
 
-# socket proxy
+# proxy
 SOCKS5 127.0.0.1:1080
 SOCKS 127.0.0.1:1080
 ```

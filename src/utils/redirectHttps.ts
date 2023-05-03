@@ -5,7 +5,7 @@ function getNewRuleByDomains(
   domainList: string[]
 ): chrome.declarativeNetRequest.Rule {
   return {
-    // 匹配urlFilter的链接的scheme修改为http
+    // change the scheme of the URLs which match the domains of hosts
     id: Number(crypto.getRandomValues(new Uint16Array(1))),
     priority: 1,
     action: {
@@ -16,7 +16,7 @@ function getNewRuleByDomains(
     },
     condition: {
       initiatorDomains: domainList,
-      // 可以重定向的资源类型
+      // available redirect types of request
       resourceTypes: [
         chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
         chrome.declarativeNetRequest.ResourceType.SCRIPT,
