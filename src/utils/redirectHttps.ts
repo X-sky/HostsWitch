@@ -1,10 +1,14 @@
 import { DNSInfo } from './parser';
 let lastRuleIds: number[] = [];
 
-function getNewRuleByDomains(
-  domainList: string[]
-): chrome.declarativeNetRequest.Rule {
-  return {
+function getNewRuleByDNSList(
+  dnsList: DNSInfo[]
+): chrome.declarativeNetRequest.Rule[] {
+  const domainList: string[] = [];
+  dnsList.forEach((cur) => {
+    domainList.push(...cur.domains);
+  });
+  return domainList.map((domain) => ({
     // change the scheme of the URLs which match the domains of hosts
     id: Number(crypto.getRandomValues(new Uint16Array(1))),
     priority: 1,
@@ -15,27 +19,19 @@ function getNewRuleByDomains(
       }
     },
     condition: {
-      initiatorDomains: domainList,
-      // available redirect types of request
+      urlFilter: `||${domain}`,
       resourceTypes: [
         chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
-        chrome.declarativeNetRequest.ResourceType.SCRIPT,
-        chrome.declarativeNetRequest.ResourceType.STYLESHEET,
-        chrome.declarativeNetRequest.ResourceType.IMAGE,
-        chrome.declarativeNetRequest.ResourceType.MEDIA
+        chrome.declarativeNetRequest.ResourceType.SUB_FRAME
       ]
     }
-  };
+  }));
 }
 
 export function updateRedirectHttpsRules(dnsList: DNSInfo[]) {
   if (!chrome.declarativeNetRequest) return;
-  const domainList: string[] = [];
-  dnsList.forEach((cur) => {
-    domainList.push(...cur.domains);
-  });
-  if (domainList.length) {
-    const newRules = [getNewRuleByDomains(domainList)];
+  const newRules = getNewRuleByDNSList(dnsList);
+  if (newRules.length) {
     chrome.declarativeNetRequest.updateDynamicRules(
       {
         addRules: newRules,

@@ -23,9 +23,6 @@ export const isIP = (address: string) => {
   );
 };
 
-export const addPort2Ip = (ip: string) =>
-  ip.indexOf(':') < 0 ? `${ip}:80` : ip;
-
 export const getValidPacProtocol = (str: string) => {
   let validProtocolInStr = '';
   VALID_PAC_PROTOCOLS.some((protocol) => {

@@ -14,7 +14,16 @@
     "default_title": "HostsWitch",
     "default_popup": "popup/index.html"
   },
-  "permissions": ["declarativeNetRequest", "proxy", "storage"],
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "declarativeNetRequestFeedback",
+    "proxy",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background/httpDebug.js"
+  },
   "host_permissions": ["http://*/*", "https://*/*"],
   "optional_host_permissions": ["*://*/*"]
 }

@@ -1,4 +1,4 @@
-import { removeComment, isIP, addPort2Ip, getValidPacProtocol } from './util';
+import { removeComment, isIP, getValidPacProtocol } from './util';
 
 export interface DNSInfo {
   ip: string;
@@ -29,7 +29,7 @@ export function parseContent(content: string): ParsedInfo {
         });
       } else if (isIP(first)) {
         dnsList.push({
-          ip: addPort2Ip(first),
+          ip: first,
           domains: rest
         });
       }

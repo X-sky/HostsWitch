@@ -5,7 +5,7 @@ import Input from '@mui/material/Input';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
+import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 // import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
@@ -58,7 +58,9 @@ export default function HeaderBar() {
           {isDrawerOpen ? (
             <ArrowBackIosNewOutlinedIcon />
           ) : (
-            <TuneOutlinedIcon />
+            <ViewSidebarOutlinedIcon sx={{
+              transform: 'rotate(180deg)'
+            }}/>
           )}
         </IconButton>
         <IconButton

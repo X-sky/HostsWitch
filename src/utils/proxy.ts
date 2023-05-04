@@ -26,24 +26,25 @@ export function setProxy({ dnsList, proxyList }: ParsedInfo) {
    * hostContent: '\nif(host == \"test\"){\nreturn \"PROXY 127.0.0.1:80; SYSTEM\";}\n';
    * proxyContent: ''
    */
-  const defaultMethod =
-    localStorage.getItem('AWESOME_HOST_otherProxies') || 'SYSTEM';
-
+  const defaultMethod = 'SYSTEM';
+  const proxyFallback = hostContent
+    ? `else { return "${proxyContent} ${defaultMethod}"; }`
+    : `return "${proxyContent} ${defaultMethod}";`;
+  // only proxy for http & https
   const pacContent = `
   function FindProxyForURL(url, host) {
-    if (shExpMatch(url, "http:*") || shExpMatch(url, "https:*")) {
+    alert('in pac'+url)
+    if (shExpMatch(url, "http:*")) {
       if (host === "localhost") {
         return "DIRECT";
       } else {
         ${hostContent}
-        ${
-          hostContent
-            ? `else { return "${proxyContent} ${defaultMethod}"; }`
-            : `return "${proxyContent} ${defaultMethod}";`
-        }
+        ${proxyFallback}
       }
+    } else if (shExpMatch(url, "https:*")) {
+      return "${proxyContent} ${defaultMethod}";
     } else {
-        return "SYSTEM";
+      return "SYSTEM";
     }
   }`;
 
