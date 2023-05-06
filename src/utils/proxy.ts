@@ -1,5 +1,7 @@
 import { DNSInfo, ProxyInfo, ParsedInfo } from './parser';
 
+const DEFAULT_METHOD = 'SYSTEM';
+
 const getDNSPacRule = (dnsInfo: DNSInfo) =>
   dnsInfo.domains.reduce((acc, domain) => {
     acc += `if(host==="${domain}"){return "PROXY ${dnsInfo.ip};SYSTEM"}`;
@@ -12,7 +14,13 @@ const getProxyPacRule = (proxyInfo: ProxyInfo) =>
     return acc;
   }, '');
 
-export function setProxy({ dnsList, proxyList }: ParsedInfo) {
+const getDirectPacRuleConditions = (domains: string[]) =>
+  'host === "localhost"' +
+  domains.reduce((acc, domain) => {
+    acc += `||host==="${domain}"`;
+    return acc;
+  }, '');
+export function setProxy({ dnsList, proxyList, directList }: ParsedInfo) {
   const hostContent = dnsList.reduce(
     (acc, cur) => (acc += getDNSPacRule(cur)),
     ''
@@ -22,29 +30,34 @@ export function setProxy({ dnsList, proxyList }: ParsedInfo) {
     ''
   );
 
+  const directCondition = getDirectPacRuleConditions(directList);
+
   /**
    * hostContent: '\nif(host == \"test\"){\nreturn \"PROXY 127.0.0.1:80; SYSTEM\";}\n';
    * proxyContent: ''
    */
-  const defaultMethod = 'SYSTEM';
+  const concatProxyMethod = `${proxyContent} ${DEFAULT_METHOD}`;
   const proxyFallback = hostContent
-    ? `else { return "${proxyContent} ${defaultMethod}"; }`
-    : `return "${proxyContent} ${defaultMethod}";`;
+    ? `else { return "${concatProxyMethod}"; }`
+    : `return "${concatProxyMethod}";`;
   // only proxy for http & https
   const pacContent = `
   function FindProxyForURL(url, host) {
     alert('in pac'+url)
     if (shExpMatch(url, "http:*")) {
-      if (host === "localhost") {
+      if (${directCondition}) {
         return "DIRECT";
       } else {
         ${hostContent}
         ${proxyFallback}
       }
     } else if (shExpMatch(url, "https:*")) {
-      return "${proxyContent} ${defaultMethod}";
+      if (${directCondition}) {
+        return "DIRECT";
+      }
+      return "${concatProxyMethod}";
     } else {
-      return "SYSTEM";
+      return "${DEFAULT_METHOD};"
     }
   }`;
 

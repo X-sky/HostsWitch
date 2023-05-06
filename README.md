@@ -34,12 +34,16 @@
 # proxy
 SOCKS5 127.0.0.1:1080
 SOCKS 127.0.0.1:1080
+
+# direct
+# localhost is added to DIRECT list as default
+DIRECT direct.com
 ```
 
 ## Possible Side Effects
 
 - WILL unsafely downgrade all `HTTPS` requests that matched host rules in your browser URL bar or iframe to `HTTP` to make HostsWitch take effect. Please make sure this extension is enabled only on websites with secure content.
-- strict Cookie strategy (`SameSite=Strict` or `SameSite=Lax`) may cause problems in 'URL-host-matched' `Iframe`. Because with these strategies, the REDIRECTED UNSAFE Iframe request will be blocked by browsers to set cookies and therefore fail to load `Iframe` pages correctly.
+- strict Cookie strategy (`SameSite=Strict` or `SameSite=Lax`) may cause problems in 'URL-host-matched' `Iframe`. Because of these strategies, the REDIRECTED UNSAFE Iframe request will be blocked by browsers from setting cookies and therefore fail to load `Iframe` pages correctly.
 
 ## Powered By
 
