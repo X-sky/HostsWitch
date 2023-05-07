@@ -1,10 +1,9 @@
-
 export const randomNumUtil = (function () {
   /**idx to pick number length from numLenPool */
   const MAX_LEN = 4;
   const numLenPool = Array.from({
     length: MAX_LEN
-  }).map((v, idx) => idx + 1);
+  }).map((_, idx) => idx + 1);
   let curNumLenIdx = 0;
   const pickRandomLen = () => {
     // reduce chance of repeating by generate in different length
