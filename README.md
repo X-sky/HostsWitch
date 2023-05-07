@@ -5,7 +5,7 @@
 ## Features
 
 - ⚡️ Real-time hosts switching
-- 🪄 Compatible with socket proxy
+- 🪄 Compatible with socket proxy & direct request
 - 📦 Browser-scoped, no system-level access
 
 ## Coming soon
@@ -13,7 +13,6 @@
 - import/export host files
 - dark mode
 - firefox support
-- custom direct proxy
 - syntax highlight
 
 ## Install
