@@ -1,14 +1,12 @@
 import { DNSInfo } from './parser';
-// let lastRuleIds: number[] = [];
+import { randomNumUtil } from './util';
 
-/**random num max 8 bit*/
-const getRandomNum = () => Number(crypto.getRandomValues(new Uint16Array(1)));
 /**redirect */
 const getRedirectRule = (
   domain: string
 ): chrome.declarativeNetRequest.Rule => ({
   // change the scheme of the URLs which match the domains of hosts
-  id: getRandomNum(),
+  id: randomNumUtil.getNum(),
   priority: 1,
   action: {
     type: chrome.declarativeNetRequest.RuleActionType.REDIRECT,

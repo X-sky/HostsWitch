@@ -1,3 +1,35 @@
+
+export const randomNumUtil = (function () {
+  /**idx to pick number length from numLenPool */
+  const MAX_LEN = 4;
+  const numLenPool = Array.from({
+    length: MAX_LEN
+  }).map((v, idx) => idx + 1);
+  let curNumLenIdx = 0;
+  const pickRandomLen = () => {
+    // reduce chance of repeating by generate in different length
+    curNumLenIdx++;
+    return numLenPool[curNumLenIdx % MAX_LEN];
+  };
+  const resetCurNumLenIdx = () => (curNumLenIdx = 0);
+  const usedNumSet = new Set<number>();
+  return {
+    getNum() {
+      let num = 0;
+      do {
+        const multiplyTimes = Math.pow(10, pickRandomLen());
+        num = Math.random() * multiplyTimes;
+      } while (num === 0 || usedNumSet.has(num));
+      usedNumSet.add(num);
+      resetCurNumLenIdx();
+      return num;
+    },
+    clear() {
+      usedNumSet.clear();
+    }
+  };
+})();
+
 export const generateUniqueId = () => {
   const charNum = 10;
   const charBit = charNum / 2;
