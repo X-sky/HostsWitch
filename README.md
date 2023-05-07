@@ -28,7 +28,7 @@
 
 # hosts
 192.168.100.1 domain.com domain.com.cn domain2.com
-192.168.100.2 test.com
+127.0.0.1:5173 dev.com
 
 # proxy
 SOCKS5 127.0.0.1:1080
@@ -39,10 +39,10 @@ SOCKS 127.0.0.1:1080
 DIRECT direct.com
 ```
 
-## Possible Side Effects⚠️
+## Possible Side Effects
 
-- WILL unsafely downgrade all `HTTPS` requests that matched host rules in your browser URL bar or iframe to `HTTP` to make HostsWitch take effect. Please make sure this extension is enabled only on websites with secure content.
-- strict Cookie strategy (`SameSite=Strict` or `SameSite=Lax`) may cause problems in 'URL-host-matched' `Iframe`. Because of these strategies, the REDIRECTED UNSAFE Iframe request will be blocked by browsers from setting cookies and therefore may fail to load `Iframe` pages correctly.
+- ⚠️WILL unsafely downgrade all `HTTPS` requests that matched host rules in your browser URL bar or iframe to `HTTP` to make HostsWitch take effect. Please make sure this extension is enabled only on websites with secure content.
+- ⚠️strict Cookie strategy (`SameSite=Strict` or `SameSite=Lax`) may cause problems in 'URL-host-matched' `Iframe`. Because of these strategies, the REDIRECTED UNSAFE Iframe request will be blocked by browsers from setting cookies and therefore may FAIL to load `Iframe` pages correctly.
 
 ## Powered By
 
