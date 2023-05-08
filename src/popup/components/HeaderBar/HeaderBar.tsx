@@ -2,16 +2,17 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
-import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 // import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import { usePanelDrawerState } from '../../../store/panelDrawer';
 import { useHostStore } from '../../../store/host';
 import { useState } from 'react';
+import { Stack } from '@mui/material';
 
 export default function HeaderBar() {
   const { isDrawerOpen, toggleDrawerState } = usePanelDrawerState();
@@ -58,9 +59,11 @@ export default function HeaderBar() {
           {isDrawerOpen ? (
             <ArrowBackIosNewOutlinedIcon />
           ) : (
-            <ViewSidebarOutlinedIcon sx={{
-              transform: 'rotate(180deg)'
-            }}/>
+            <ViewSidebarOutlinedIcon
+              sx={{
+                transform: 'rotate(180deg)'
+              }}
+            />
           )}
         </IconButton>
         <IconButton
@@ -88,20 +91,9 @@ export default function HeaderBar() {
             textOverflow: 'ellipsis'
           }}
         >
-          {currentHostInfo.enabled && (
-            <Chip
-              label="read only"
-              size="small"
-              sx={{
-                position: 'relative',
-                right: '10px',
-                fontSize: '10px'
-              }}
-            />
-          )}
           {editFlag ? (
             <Input
-              placeholder="Placeholder"
+              placeholder="panel name"
               inputProps={{
                 'aria-label': 'edit panel name'
               }}
@@ -113,11 +105,25 @@ export default function HeaderBar() {
                 });
               }}
               onBlur={() => setEditFlag(false)}
+              autoFocus
             />
           ) : (
-            <span onDoubleClick={dblNameClickHandler}>
+            <Stack direction="row" sx={{ display: 'inline-flex' }}>
               {currentHostInfo.name}
-            </span>
+              {/* editable when enabled */}
+              {!currentHostInfo.enabled && (
+                <IconButton
+                  size="small"
+                  edge="start"
+                  color="primary"
+                  aria-label="edit panel name"
+                  onClick={dblNameClickHandler}
+                  sx={{ ml: 1 }}
+                >
+                  <ModeEditOutlinedIcon fontSize="small" />
+                </IconButton>
+              )}
+            </Stack>
           )}
         </Typography>
 

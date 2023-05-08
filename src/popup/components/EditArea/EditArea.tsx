@@ -32,7 +32,7 @@ export default function EditArea() {
         label={
           currentHostInfo.enabled
             ? currentHostInfo.id !== ALL_HOST_ID
-              ? 'switch this panel off to edit content'
+              ? 'switch this panel off to edit panel name and content'
               : 'ALL_HOST panel is readonly'
             : 'content area'
         }
