@@ -5,7 +5,7 @@
 ## Features
 
 - ⚡️ Real-time hosts switching
-- 🪄 Compatible with socket proxy & direct request
+- 🔩 Compatible with socket proxy & direct request
 - 📦 Browser-scoped, no system-level access
 
 ## Coming soon
@@ -39,10 +39,11 @@ SOCKS 127.0.0.1:1080
 DIRECT direct.com
 ```
 
-## Possible Side Effects
+## Caveats
 
-- ⚠️WILL unsafely downgrade all `HTTPS` requests that matched host rules in your browser URL bar or iframe to `HTTP` to make HostsWitch take effect. Please make sure this extension is enabled only on websites with secure content.
+- ⚠️will UNSAFELY downgrade all `HTTPS` requests that match the host rules in your browser URL bar or iframe to `HTTP` to make HostsWitch take effect. Please make sure this extension is enabled only on websites with secure content.
 - ⚠️strict Cookie strategy (`SameSite=Strict` or `SameSite=Lax`) may cause problems in 'URL-host-matched' `Iframe`. Because of these strategies, the REDIRECTED UNSAFE Iframe request will be blocked by browsers from setting cookies and therefore may FAIL to load `Iframe` pages correctly.
+- ⚠️some sites may lead to infinite redirection and thus fail to load page `ERR_TOO_MANY_REDIRECTS`. Opening this page in `InPrivate Mode` will fix this problem.
 
 ## Powered By
 
