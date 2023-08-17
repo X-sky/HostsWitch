@@ -44,6 +44,7 @@ export default function HeaderBar() {
     >
       <Toolbar
         disableGutters
+        variant='dense'
         sx={{
           px: 1,
           color: 'primary.main'

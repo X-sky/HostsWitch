@@ -30,7 +30,7 @@ export default function PanelList() {
         flexShrink: 0,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
-          top: '65px',
+          top: '50px',
           height: 400 - 65,
           boxSizing: 'border-box'
         }
