@@ -36,7 +36,8 @@ SOCKS 127.0.0.1:1080
 
 # direct
 # localhost is added to DIRECT list as default
-DIRECT direct.com
+DIRECT direct.com # only matches "direct.com"
+DIRECT *testDirect.com # match all sub domains, match both "testDirect.com" and "sub.testDirect.com"
 ```
 
 ## Caveats
@@ -52,7 +53,7 @@ DIRECT direct.com
 - [MUI](https://mui.com/)
 - [Jotai](https://jotai.org/)
 
-Inspired by [SwitchHosts](https://github.com/oldj/SwitchHosts), an App for managing system-level hosts file, it is based on Electron, React, Jotai, Chakra UI, CodeMirror, etc.
+Inspired by [SwitchHosts](https://github.com/oldj/SwitchHosts), an App based on Electron, React, Jotai, Chakra UI, CodeMirror, etc. for managing system-level file `hosts`
 
 ## License
 

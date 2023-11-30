@@ -15,11 +15,19 @@ const getProxyPacRule = (proxyInfo: ProxyInfo) =>
   }, '');
 
 const getDirectPacRuleConditions = (domains: string[]) =>
-  'host === "localhost"' +
   domains.reduce((acc, domain) => {
-    acc += `||host==="${domain}"`;
+    acc += '||';
+    if (domain.includes('*')) {
+      // try to match all sub domains 
+      // *test.com will match both "test.com" and "sub.test.com"
+      acc += `dnsDomainIs(host, "${domain.replaceAll('*', '')}")`
+    } else {
+      // match exact domain
+      // test.com will only match "test.com"
+      acc += `localHostOrDomainIs(host, "${domain}")`;
+    }
     return acc;
-  }, '');
+  }, '').slice(2);
 export function setProxy({ dnsList, proxyList, directList }: ParsedInfo) {
   const hostContent = dnsList.reduce(
     (acc, cur) => (acc += getDNSPacRule(cur)),
@@ -30,10 +38,10 @@ export function setProxy({ dnsList, proxyList, directList }: ParsedInfo) {
     ''
   );
 
-  const directCondition = getDirectPacRuleConditions(directList);
+  const directCondition = getDirectPacRuleConditions(directList) || false;
 
   /**
-   * hostContent: '\nif(host == \"test\"){\nreturn \"PROXY 127.0.0.1:80; SYSTEM\";}\n';
+   * hostContent: '\nif(host === \"test\"){\nreturn \"PROXY 127.0.0.1:80; SYSTEM\";}\n';
    * proxyContent: ''
    */
   const concatProxyMethod = `${proxyContent} ${DEFAULT_METHOD}`;
@@ -43,7 +51,6 @@ export function setProxy({ dnsList, proxyList, directList }: ParsedInfo) {
   // only proxy for http & https
   const pacContent = `
   function FindProxyForURL(url, host) {
-    alert('in pac'+url)
     if (shExpMatch(url, "http:*")) {
       if (${directCondition}) {
         return "DIRECT";
