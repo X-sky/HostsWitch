@@ -13,7 +13,7 @@ export default function EditArea() {
     <Box
       component="form"
       sx={{
-        paddingTop: 8,
+        paddingTop: 6,
         width: `calc(100% - ${drawerWidth}px)`,
         position: 'relative',
         left: `${drawerWidth}px`,
