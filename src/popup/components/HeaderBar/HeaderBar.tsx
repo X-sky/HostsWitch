@@ -7,15 +7,26 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ViewSidebarOutlinedIcon from '@mui/icons-material/ViewSidebarOutlined';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-// import SettingsIcon from '@mui/icons-material/Settings';
+import MoveUpOutlinedIcon from '@mui/icons-material/MoveUpOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
-import { usePanelDrawerState } from '../../../store/panelDrawer';
+import {
+  PANEL_MODE_LIST,
+  PanelMode,
+  usePanelDrawerState
+} from '../../../store/panelDrawer';
 import { useHostStore } from '../../../store/host';
 import { useState } from 'react';
 import { Stack } from '@mui/material';
 
+const modeIconMap: Record<string, JSX.Element> = {
+  move: <MoveUpOutlinedIcon />,
+  delete: <DeleteOutlineOutlinedIcon />
+};
+
 export default function HeaderBar() {
-  const { isDrawerOpen, toggleDrawerState } = usePanelDrawerState();
+  const { isDrawerOpen, toggleDrawerState, setPanelMode } =
+    usePanelDrawerState();
   const {
     currentHostInfo,
     addHostPanel,
@@ -24,6 +35,24 @@ export default function HeaderBar() {
     setExtensionEnabled
   } = useHostStore();
   const [editFlag, setEditFlag] = useState(false);
+
+  const [modeActionList, updateModeActionList] = useState(
+    PANEL_MODE_LIST.filter((mode) => mode).map((mode) => ({
+      mode,
+      active: false,
+      component: modeIconMap[mode] || null
+    }))
+  );
+  const clickModeActionBtn = (toggledMode: PanelMode) => {
+    const newList = modeActionList.map((info) => ({
+      ...info,
+      // toggle if is toggledMode
+      active: info.mode === toggledMode ? !info.active : false
+    }));
+    const nextMode = newList.find((info) => info.active)?.mode || '';
+    updateModeActionList(newList);
+    setPanelMode(nextMode);
+  };
 
   const dblNameClickHandler = () => {
     if (!currentHostInfo.enabled) {
@@ -44,7 +73,7 @@ export default function HeaderBar() {
     >
       <Toolbar
         disableGutters
-        variant='dense'
+        variant="dense"
         sx={{
           px: 1,
           color: 'primary.main'
@@ -56,6 +85,7 @@ export default function HeaderBar() {
           color="inherit"
           aria-label="toggle panel drawer"
           onClick={toggleDrawerState}
+          title={isDrawerOpen ? 'hide panels' : 'show panels'}
         >
           {isDrawerOpen ? (
             <ArrowBackIosNewOutlinedIcon />
@@ -73,9 +103,23 @@ export default function HeaderBar() {
           color="inherit"
           aria-label="add a panel"
           onClick={addHostPanel}
+          title="add a host panel"
         >
           <AddCircleOutlineIcon />
         </IconButton>
+        {modeActionList.map((modeActionInfo) => (
+          <IconButton
+            key={modeActionInfo.mode}
+            size="small"
+            edge="start"
+            color={modeActionInfo.active ? 'inherit' : 'default'}
+            aria-label={`toggle ${modeActionInfo.mode} mode`}
+            title={`toggle ${modeActionInfo.mode} mode`}
+            onClick={() => clickModeActionBtn(modeActionInfo.mode)}
+          >
+            {modeActionInfo.component}
+          </IconButton>
+        ))}
         <Typography
           variant="h5"
           component="div"

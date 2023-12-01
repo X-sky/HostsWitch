@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { teal } from '@mui/material/colors';
 import HeaderBar from './components/HeaderBar/HeaderBar';
-import PanelList from './components/PanelList/PanelList';
+import PanelListDrawer from './components/PanelList/PanelListDrawer';
 import EditArea from './components/EditArea/EditArea';
 import useAutoUpdateConfig from '../hooks/useUpdateConfig';
 
@@ -37,7 +37,7 @@ function App() {
             pt: '2px'
           }}
         >
-          <PanelList />
+          <PanelListDrawer />
           <EditArea />
         </Box>
       </Box>

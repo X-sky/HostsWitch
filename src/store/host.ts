@@ -1,3 +1,4 @@
+import { arrayMove } from '@dnd-kit/sortable';
 import { generateUniqueId } from '../utils/util';
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
@@ -7,7 +8,7 @@ const EXT_DB_PREFIX = 'HOSTS_WITCH';
 export const ALL_HOST_ID = 'ALL_HOST';
 export const ALL_HOST_NAME = 'ALL_HOST';
 
-interface HostPanelInfo {
+export interface HostPanelInfo {
   id: string;
   name: string;
   content: string;
@@ -78,6 +79,9 @@ export function useHostStore() {
     // TODO: confirm modal
     setHostPanels((s) => s.filter((info) => info.id !== target.id));
   };
+  const moveHostPanel = (from: number, to: number)=>{
+    setHostPanels(arrayMove(hostPanels, from, to));
+  }
 
   const hostContent = useMemo(
     () => ({
@@ -131,6 +135,7 @@ export function useHostStore() {
     setSelectedPanelId,
     addHostPanel,
     removeHostPanel,
+    moveHostPanel,
     hostContent,
     currentHostInfo
   };
