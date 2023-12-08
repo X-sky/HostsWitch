@@ -17,7 +17,7 @@ export const randomNumUtil = (function () {
       let num = 0;
       do {
         const multiplyTimes = Math.pow(10, pickRandomLen());
-        num = Math.random() * multiplyTimes;
+        num = Math.round(Math.random() * multiplyTimes);
       } while (num === 0 || usedNumSet.has(num));
       usedNumSet.add(num);
       resetCurNumLenIdx();

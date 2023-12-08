@@ -41,7 +41,7 @@ export function updateRedirectHttpsRules(dnsList: DNSInfo[]) {
   if (!chrome.declarativeNetRequest) return;
   const newRules = getNewRulesByDNSList(dnsList);
   chrome.declarativeNetRequest.getDynamicRules().then((curDynamicRules) => {
-    const lastRuleIds = curDynamicRules.map((info) => info.id);
+    const lastRuleIds = curDynamicRules.map((info) => info.id).filter(id=>Boolean(id));
     const updateOpt: chrome.declarativeNetRequest.UpdateRuleOptions = {
       removeRuleIds: lastRuleIds
     };
