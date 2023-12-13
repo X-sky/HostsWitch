@@ -42,11 +42,13 @@ const hostPanelsAtom = atomWithStorage<HostPanelInfo[]>(
   []
 );
 const selectedPanelIdAtom = atom(ALL_HOST_ID);
+const panelUpdatingAtom = atom(false);
 
 export function useHostStore() {
   const [extensionEnabled, setExtensionEnabled] = useAtom(extensionEnabledAtom);
   const [hostPanels, setHostPanels] = useAtom(hostPanelsAtom);
   const [selectedPanelId, setSelectedPanelId] = useAtom(selectedPanelIdAtom);
+  const [panelUpdating, setPanelUpdating] = useAtom(panelUpdatingAtom);
 
   const updatePanelItem = (
     target: Pick<HostPanelInfo, 'id'> & Partial<HostPanelInfo>
@@ -79,9 +81,26 @@ export function useHostStore() {
     // TODO: confirm modal
     setHostPanels((s) => s.filter((info) => info.id !== target.id));
   };
-  const moveHostPanel = (from: number, to: number)=>{
+  const moveHostPanel = (from: number, to: number) => {
     setHostPanels(arrayMove(hostPanels, from, to));
-  }
+  };
+  const exportHosts = () => {
+    const a = document.createElement('a');
+    a.download = 'host-info.json';
+    a.href = URL.createObjectURL(
+      new Blob([JSON.stringify(hostPanels)], { type: 'application/json' })
+    );
+    a.click();
+  };
+  const importHosts = (list: Partial<HostPanelInfo>[]) => {
+    const targetList = list.map((item) => {
+      const importedItem: Partial<HostPanelInfo> = { ...item, enabled: false };
+      // generate item with new ids;
+      delete importedItem.id;
+      return generateHostPanelInfo(importedItem);
+    });
+    setHostPanels((s) => [...s, ...targetList]);
+  };
 
   const hostContent = useMemo(
     () => ({
@@ -125,8 +144,12 @@ export function useHostStore() {
   }, [selectedPanelId, hostContent, hostPanels]);
 
   return {
+    panelUpdating,
+    setPanelUpdating,
     extensionEnabled,
     setExtensionEnabled,
+    exportHosts,
+    importHosts,
     hostPanels,
     setHostPanels,
     updatePanelItem,

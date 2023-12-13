@@ -7,10 +7,10 @@
 - ⚡️ Real-time hosts switching
 - 🔩 Compatible with socket proxy & direct request
 - 📦 Browser-scoped, no system-level access
+- 🤝 Import and export. Easy for teamwork
 
 ## Coming soon
 
-- import/export host files
 - dark mode
 - firefox support
 - syntax highlight

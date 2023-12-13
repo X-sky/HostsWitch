@@ -10,6 +10,8 @@ import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import MoveUpOutlinedIcon from '@mui/icons-material/MoveUpOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
+import UploadIcon from '@mui/icons-material/Upload';
+import DownloadIcon from '@mui/icons-material/Download';
 import {
   PANEL_MODE_LIST,
   PanelMode,
@@ -18,6 +20,7 @@ import {
 import { useHostStore } from '../../../store/host';
 import { useState } from 'react';
 import { Stack } from '@mui/material';
+import useImportAction from '../../../hooks/useImportActions';
 
 const modeIconMap: Record<string, JSX.Element> = {
   move: <MoveUpOutlinedIcon />,
@@ -32,8 +35,10 @@ export default function HeaderBar() {
     addHostPanel,
     updatePanelItem,
     extensionEnabled,
-    setExtensionEnabled
+    setExtensionEnabled,
+    exportHosts
   } = useHostStore();
+  const { triggerImportFile } = useImportAction();
   const [editFlag, setEditFlag] = useState(false);
 
   const [modeActionList, updateModeActionList] = useState(
@@ -172,9 +177,27 @@ export default function HeaderBar() {
           )}
         </Typography>
 
+        <IconButton
+          size="small"
+          edge="start"
+          title="export hosts panels"
+          aria-label="export hosts panels"
+          onClick={exportHosts}
+        >
+          <UploadIcon />
+        </IconButton>
         {/* <IconButton size="small" edge="start" aria-label="system settings">
           <SettingsIcon />
         </IconButton> */}
+        <IconButton
+          size="small"
+          edge="start"
+          title="import hosts panels"
+          aria-label="import hosts panels"
+          onClick={triggerImportFile}
+        >
+          <DownloadIcon />
+        </IconButton>
         <IconButton
           size="small"
           edge="start"
