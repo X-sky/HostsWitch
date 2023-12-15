@@ -1,4 +1,4 @@
-import { useHostStore } from "../store/host";
+import { useHostStore } from '../store/host';
 
 export default function useImportAction() {
   const { importHosts, setPanelUpdating } = useHostStore();
@@ -8,13 +8,19 @@ export default function useImportAction() {
   inputEl.addEventListener('change', async () => {
     setPanelUpdating(true);
     try {
-      const jsonFile = inputEl.files?.[0];
-      if (jsonFile) {
-        const text = await jsonFile.text();
-
-        const ret = JSON.parse(text);
-        if (Array.isArray(ret)) {
+      const file = inputEl.files?.[0];
+      if (file) {
+        const text = await file.text();
+        if (text.startsWith('[') || text.startsWith('{')) {
+          // maybe exported by HostsWitch
+          const ret = JSON.parse(text);
           importHosts(ret);
+        } else {
+          // normal text, try direct import
+          importHosts({
+            name: file.name,
+            content: text
+          });
         }
       }
     } catch (err) {

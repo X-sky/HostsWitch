@@ -12,6 +12,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
 import UploadIcon from '@mui/icons-material/Upload';
 import DownloadIcon from '@mui/icons-material/Download';
+import Stack from '@mui/material/Stack';
 import {
   PANEL_MODE_LIST,
   PanelMode,
@@ -19,7 +20,6 @@ import {
 } from '../../../store/panelDrawer';
 import { useHostStore } from '../../../store/host';
 import { useState } from 'react';
-import { Stack } from '@mui/material';
 import useImportAction from '../../../hooks/useImportActions';
 
 const modeIconMap: Record<string, JSX.Element> = {

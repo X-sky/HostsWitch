@@ -3,6 +3,7 @@ import { generateUniqueId } from '../utils/util';
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useMemo } from 'react';
+import useMessage from '../hooks/useMessage';
 
 const EXT_DB_PREFIX = 'HOSTS_WITCH';
 export const ALL_HOST_ID = 'ALL_HOST';
@@ -49,6 +50,7 @@ export function useHostStore() {
   const [hostPanels, setHostPanels] = useAtom(hostPanelsAtom);
   const [selectedPanelId, setSelectedPanelId] = useAtom(selectedPanelIdAtom);
   const [panelUpdating, setPanelUpdating] = useAtom(panelUpdatingAtom);
+  const { error } = useMessage();
 
   const updatePanelItem = (
     target: Pick<HostPanelInfo, 'id'> & Partial<HostPanelInfo>
@@ -71,10 +73,12 @@ export function useHostStore() {
       enabled: !target.enabled
     });
   };
+  const MAX_PANEL_NUM = 20;
   const addHostPanel = () => {
-    const maxPanelNum = 20;
-    if (hostPanels.length < maxPanelNum) {
+    if (hostPanels.length < MAX_PANEL_NUM) {
       setHostPanels((s) => [...s, generateHostPanelInfo()]);
+    } else {
+      error(`host panels exceeds limit: ${MAX_PANEL_NUM}`);
     }
   };
   const removeHostPanel = (target: HostPanelInfo) => {
@@ -92,14 +96,37 @@ export function useHostStore() {
     );
     a.click();
   };
-  const importHosts = (list: Partial<HostPanelInfo>[]) => {
-    const targetList = list.map((item) => {
-      const importedItem: Partial<HostPanelInfo> = { ...item, enabled: false };
-      // generate item with new ids;
-      delete importedItem.id;
-      return generateHostPanelInfo(importedItem);
-    });
-    setHostPanels((s) => [...s, ...targetList]);
+  const importHosts = (
+    importInfo: Partial<HostPanelInfo>[] | Record<string, unknown> | string
+  ) => {
+    const generateNewHostPanelInfo = (p: Record<string, unknown>) => {
+      const copiedItem = { ...p, enabled: false };
+      if ('id' in copiedItem) {
+        delete copiedItem.id;
+      }
+      return generateHostPanelInfo(copiedItem);
+    };
+    if (Array.isArray(importInfo)) {
+      const list = [
+        ...hostPanels,
+        ...importInfo
+          .filter((item) => item.content)
+          .map(generateNewHostPanelInfo)
+      ];
+      if (list.length <= MAX_PANEL_NUM) {
+        setHostPanels(list);
+      } else {
+        error(`host panels exceeds limit: ${MAX_PANEL_NUM}`);
+      }
+    } else if (typeof importInfo === 'string') {
+      // has content
+      setHostPanels((s) => [
+        ...s,
+        generateNewHostPanelInfo({ content: importInfo })
+      ]);
+    } else if ('content' in importInfo) {
+      setHostPanels((s) => [...s, generateNewHostPanelInfo(importInfo)]);
+    }
   };
 
   const hostContent = useMemo(
