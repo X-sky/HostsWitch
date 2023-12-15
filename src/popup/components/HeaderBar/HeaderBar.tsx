@@ -10,8 +10,6 @@ import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import MoveUpOutlinedIcon from '@mui/icons-material/MoveUpOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import PowerSettingsNew from '@mui/icons-material/PowerSettingsNew';
-import UploadIcon from '@mui/icons-material/Upload';
-import DownloadIcon from '@mui/icons-material/Download';
 import Stack from '@mui/material/Stack';
 import {
   PANEL_MODE_LIST,
@@ -20,7 +18,7 @@ import {
 } from '../../../store/panelDrawer';
 import { useHostStore } from '../../../store/host';
 import { useState } from 'react';
-import useImportAction from '../../../hooks/useImportActions';
+import SettingsMenu from '../SettingsMenu/SettingsMenu';
 
 const modeIconMap: Record<string, JSX.Element> = {
   move: <MoveUpOutlinedIcon />,
@@ -35,10 +33,8 @@ export default function HeaderBar() {
     addHostPanel,
     updatePanelItem,
     extensionEnabled,
-    setExtensionEnabled,
-    exportHosts
+    setExtensionEnabled
   } = useHostStore();
-  const { triggerImportFile } = useImportAction();
   const [editFlag, setEditFlag] = useState(false);
 
   const [modeActionList, updateModeActionList] = useState(
@@ -176,28 +172,7 @@ export default function HeaderBar() {
             </Stack>
           )}
         </Typography>
-
-        <IconButton
-          size="small"
-          edge="start"
-          title="export hosts panels"
-          aria-label="export hosts panels"
-          onClick={exportHosts}
-        >
-          <UploadIcon />
-        </IconButton>
-        {/* <IconButton size="small" edge="start" aria-label="system settings">
-          <SettingsIcon />
-        </IconButton> */}
-        <IconButton
-          size="small"
-          edge="start"
-          title="import hosts panels"
-          aria-label="import hosts panels"
-          onClick={triggerImportFile}
-        >
-          <DownloadIcon />
-        </IconButton>
+        <SettingsMenu />
         <IconButton
           size="small"
           edge="start"
@@ -206,6 +181,9 @@ export default function HeaderBar() {
             extensionEnabled ? 'shut down extension' : 'turn on extension'
           }
           onClick={() => setExtensionEnabled((state) => !state)}
+          sx={{
+            ml: 1
+          }}
         >
           <PowerSettingsNew />
         </IconButton>
